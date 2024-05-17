@@ -33,7 +33,6 @@ fn main() {
 
     let shared_state_clone = shared_state.clone();
     ctrlc::set_handler(move || {
-        // set disabling to false
         let (lock, cvar) = &*shared_state_clone;
         let mut state = lock.lock().unwrap();
         state.disabling = false;
@@ -49,8 +48,8 @@ fn main() {
         let mut state = lock.lock().unwrap();
         state.disabling = true;
         println!("Disabling internet.");
-        drop(state); // TODO check
-        cvar.notify_one();
+        drop(state);
+        cvar.notify_one(); // TODO I don't think this is necessary
         let duration = get_duration();
         let mut state = lock.lock().unwrap();
         state.disabling = false;
